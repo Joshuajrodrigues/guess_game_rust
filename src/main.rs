@@ -1,4 +1,4 @@
-use std::io;
+use std::{cmp::Ordering, io};
 
 struct Game {
     score: i32,
@@ -42,19 +42,23 @@ impl Game {
     }
 
     fn compare(&mut self, guess: i32) {
-        if guess == self.random_num {
-            println!("Good job the number was indeed {}", guess);
-            self.inc_score();
-            self.generate_random_number();
-            self.reset_attempts();
-        } else if guess > self.random_num {
-            println!("-----------------------");
-            println!("Guess a bit lower");
-            self.check_attempts();
-        } else if guess < self.random_num {
-            println!("-----------------------");
-            println!("Guess a bit higer");
-            self.check_attempts();
+        match guess.cmp(&self.random_num) {
+            Ordering::Equal => {
+                println!("Good job the number was indeed {}", guess);
+                self.inc_score();
+                self.generate_random_number();
+                self.reset_attempts();
+            }
+            Ordering::Greater => {
+                println!("-----------------------");
+                println!("Guess a bit lower");
+                self.check_attempts();
+            }
+            Ordering::Less => {
+                println!("-----------------------");
+                println!("Guess a bit higer");
+                self.check_attempts();
+            }
         }
     }
 
